@@ -27,16 +27,16 @@ import GHC.Generics
 data Root
    = Root
      {
-         filename: String,
-         rootContent: [ Dec ]
+         filename :: String,
+         rootContent :: [ Dec ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Asts
    = Asts
      {
-         dirname: String,
-         astsContent: [ Root ]
+         dirname :: String,
+         astsContent :: [ Root ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
