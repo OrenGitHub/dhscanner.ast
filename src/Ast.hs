@@ -24,15 +24,31 @@ import qualified Token
 import Data.Aeson
 import GHC.Generics
 
+data Root
+   = Root
+     {
+         filename: String,
+         rootContent: [ Dec ]
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data Asts
+   = Asts
+     {
+         dirname: String,
+         astsContent: [ Root ]
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
 data Dec
-   = DecVar  DecVarContent
+   = DecVar DecVarContent
    | DecFunc DecFuncContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Exp
    = ExpInt Token.ConstInt
-   | ExpBinop ExpBinopContent
    | ExpCall ExpCallContent
+   | ExpBinop ExpBinopContent
    | ExpVar Var
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
