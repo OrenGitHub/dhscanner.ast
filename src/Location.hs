@@ -16,5 +16,5 @@ data Location =
          colStart  :: Int,
          colEnd    :: Int
      }
-     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
 

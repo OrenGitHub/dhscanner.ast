@@ -23,6 +23,7 @@ import qualified Token
 
 import Data.Aeson
 import GHC.Generics
+import Data.Map ( Map )
 
 data Root
    = Root
@@ -43,6 +44,7 @@ data Asts
 data Dec
    = DecVar DecVarContent
    | DecFunc DecFuncContent
+   | DeclClass DecClassContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Exp
@@ -64,6 +66,49 @@ data Param
          paramName        :: Token.ParamName,
          paramNominalType :: Token.NominalTy,
          paramSerialIdx   :: Word
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data DataMember
+   = DataMember
+     {
+         dataMemberName :: Token.MembrName,
+         dataMemberNominalType :: Token.NominalTy,
+         dataMemberInitValue :: Maybe Exp
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data DataMembers
+   = DataMembers
+     {
+         dataMembersContent :: Map Token.MembrName DataMember
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data DecMethodContent
+   = DecMethodContent
+     {
+         methodName :: Token.MethdName,
+         methodReturnType :: Token.NominalTy,
+         methodParams :: [ Param ],
+         methodBody :: [ Stmt ]
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data Methods
+   = Methods
+     {
+         methodsContent :: Map Token.MethdName DecMethodContent
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data DecClassContent
+   = DecClassContent
+     {
+         decClassName :: Token.ClassName,
+         decClassSupers :: [ Token.SuperName ],
+         decClassDataMembers :: DataMembers,
+         decClassMethods :: Methods
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
