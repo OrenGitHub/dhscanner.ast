@@ -44,7 +44,7 @@ data Asts
 data Dec
    = DecVar DecVarContent
    | DecFunc DecFuncContent
-   | DeclClass DecClassContent
+   | DecClass DecClassContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Exp
@@ -88,10 +88,10 @@ data DataMembers
 data DecMethodContent
    = DecMethodContent
      {
-         methodName :: Token.MethdName,
-         methodReturnType :: Token.NominalTy,
-         methodParams :: [ Param ],
-         methodBody :: [ Stmt ]
+         decMethodReturnType :: Token.NominalTy,
+         decMethodName       :: Token.MethdName,
+         decMethodParams     :: [ Param ],
+         decMethodBody       :: [ Stmt ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
