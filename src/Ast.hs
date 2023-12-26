@@ -58,6 +58,7 @@ data Stmt
    = StmtWhile StmtWhileContent
    | StmtAssign Var Exp
    | StmtReturn (Maybe Exp)
+   | StmtDecvar DecVarContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Param
