@@ -45,10 +45,12 @@ data Dec
    = DecVar DecVarContent
    | DecFunc DecFuncContent
    | DecClass DecClassContent
+   | DecScriptAssign StmtAssignContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Exp
    = ExpInt Token.ConstInt
+   | ExpStr Token.ConstStr
    | ExpCall ExpCallContent
    | ExpBinop ExpBinopContent
    | ExpVar Var
@@ -56,7 +58,7 @@ data Exp
 
 data Stmt
    = StmtWhile StmtWhileContent
-   | StmtAssign Var Exp
+   | StmtAssign StmtAssignContent
    | StmtReturn (Maybe Exp)
    | StmtDecvar DecVarContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
@@ -138,6 +140,14 @@ data ExpBinopContent
    | ExpBinopTimes  Exp Exp
    | ExpBinopDivide Exp Exp
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data StmtAssignContent
+   = StmtAssignContent
+     {
+         stmtAssignLhs :: Var,
+         stmtAssignRhs :: Exp
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data StmtWhileContent
    = StmtWhileContent
