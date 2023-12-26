@@ -58,3 +58,11 @@ data ConstInt
        constIntLocation :: Location
    }
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ConstStr
+   = ConstStr
+   {
+       constStrValue :: String,
+       constStrLocation :: Location
+   }
+   deriving ( Show, Eq, Generic, ToJSON, FromJSON )
