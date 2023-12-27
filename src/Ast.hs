@@ -61,6 +61,7 @@ data Stmt
    | StmtAssign StmtAssignContent
    | StmtReturn (Maybe Exp)
    | StmtDecvar DecVarContent
+   | StmtCall ExpCallContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Param
@@ -167,7 +168,7 @@ data ExpCallContent
 
 data Var
    = VarSimple Token.VarName
-   | VarField Var Token.FieldName
-   | VarSubscript Var Exp
+   | VarField Exp Token.FieldName
+   | VarSubscript Exp Exp
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
