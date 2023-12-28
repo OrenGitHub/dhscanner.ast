@@ -45,7 +45,7 @@ data Dec
    = DecVar DecVarContent
    | DecFunc DecFuncContent
    | DecClass DecClassContent
-   | DecScriptAssign StmtAssignContent
+   | DecImport DecImportContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Exp
@@ -134,6 +134,53 @@ data DecVarContent
          decVarInitValue   :: Maybe Exp
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ImportLocalWildcardContent
+   = ImportLocalWildcardContent
+     {
+         importLocalWildcardPackage :: [ Token.Named ],
+         importLocalWildcardLevel :: Int
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ImportLocalNormalContent
+   = ImportLocalNormalContent
+     {
+         importLocalNormalPackage :: [ Token.Named ],
+         importLocalNormalLevel :: Int,
+         importLocalNormalNames :: [ Token.Named ]
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ImportNonLocalWildcardContent
+   = ImportNonLocalWildcardContent
+     {
+         importNonLocalWildcardPackage :: [ Token.Named ]
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ImportNonLocalNormalContent
+   = ImportNonLocalNormalContent
+     {
+         importNonLocalNormalPackage :: [ Token.Named ],
+         importNonLocalNormalNames :: [ Token.Named ]
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ImportLocalContent
+   = ImportLocalWildcard ImportLocalWildcardContent
+   | ImportLocalNormal ImportLocalNormalContent
+   deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ImportNonLocalContent
+   = ImportNonLocalWildcard ImportNonLocalWildcardContent
+   | ImportNonLocalNormal ImportNonLocalNormalContent
+   deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data DecImportContent
+   = DecImportLocal ImportLocalContent 
+   | DecImportNonLocal ImportNonLocalContent
+   deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data ExpBinopContent
    = ExpBinopPlus   Exp Exp
