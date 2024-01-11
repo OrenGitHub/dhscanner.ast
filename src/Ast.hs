@@ -19,6 +19,7 @@ module Ast
 
 where
 
+import Location
 import qualified Token
 
 import Data.Aeson
@@ -57,7 +58,9 @@ data Exp
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Stmt
-   = StmtWhile StmtWhileContent
+   = StmtBreak StmtBreakContent
+   | StmtWhile StmtWhileContent
+   | StmtTry StmtTryContent
    | StmtAssign StmtAssignContent
    | StmtReturn (Maybe Exp)
    | StmtDecvar DecVarContent
@@ -197,11 +200,26 @@ data StmtAssignContent
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
+data StmtTryContent
+   = StmtTryContent
+     {
+         stmtTryPart :: [ Stmt ],
+         stmtCatchPart :: [ Stmt ]
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data StmtBreakContent
+   = StmtBreakContent
+     {
+         stmtBreakLocation :: Location
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
 data StmtWhileContent
    = StmtWhileContent
      {
          stmtWhileCond :: Exp,
-         stmtWhileBody :: [Stmt]
+         stmtWhileBody :: [ Stmt ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
