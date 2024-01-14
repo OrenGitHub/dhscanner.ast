@@ -166,7 +166,7 @@ data ImportNonLocalNormalContent
    = ImportNonLocalNormalContent
      {
          importNonLocalNormalPackage :: [ Token.Named ],
-         importNonLocalNormalNames :: [ Token.Named ]
+         importNonLocalNormalNames :: [[ Token.Named ]]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
