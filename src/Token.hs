@@ -19,15 +19,15 @@ data Named
    }
    deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
    
-data VarName   = VarName   Named deriving ( Show, Eq, Generic, ToJSON, FromJSON )
-data FuncName  = FuncName  Named deriving ( Show, Eq, Generic, ToJSON, FromJSON )
-data ParamName = ParamName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON )
-data FieldName = FieldName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON )
-data ClassName = ClassName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON )
-data SuperName = SuperName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+data VarName   = VarName   Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+data FuncName  = FuncName  Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+data ParamName = ParamName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+data FieldName = FieldName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+data ClassName = ClassName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+data SuperName = SuperName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
 data MembrName = MembrName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord, ToJSONKey, FromJSONKey )
 data MethdName = MethdName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord, ToJSONKey, FromJSONKey )
-data NominalTy = NominalTy Named deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+data NominalTy = NominalTy Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
 
 -- signatures (to quiet ghc -Wall)
 getVarNameToken   :: VarName   -> Named
@@ -57,7 +57,7 @@ data ConstInt
        constIntValue :: Int,
        constIntLocation :: Location
    }
-   deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+   deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
 
 data ConstStr
    = ConstStr
@@ -65,4 +65,4 @@ data ConstStr
        constStrValue :: String,
        constStrLocation :: Location
    }
-   deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+   deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
