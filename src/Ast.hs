@@ -30,7 +30,7 @@ data Root
    = Root
      {
          filename :: String,
-         rootContent :: [ Dec ]
+         actualAst :: [ Dec ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
@@ -43,28 +43,28 @@ data Asts
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Dec
-   = DecVar DecVarContent
-   | DecFunc DecFuncContent
-   | DecClass DecClassContent
-   | DecImport DecImportContent
+   = DecVarCtor DecVar
+   | DecFuncCtor DecFunc
+   | DecClassCtor DecClass
+   | DecImportCtor DecImport
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Exp
-   = ExpInt Token.ConstInt
-   | ExpStr Token.ConstStr
-   | ExpCall ExpCallContent
-   | ExpBinop ExpBinopContent
-   | ExpVar Var
+   = ExpIntCtor ExpInt
+   | ExpStrCtor ExpStr
+   | ExpVarCtor ExpVar
+   | ExpCallCtor ExpCall
+   | ExpBinopCtor ExpBinop
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Stmt
-   = StmtBreak StmtBreakContent
-   | StmtWhile StmtWhileContent
-   | StmtTry StmtTryContent
-   | StmtAssign StmtAssignContent
-   | StmtReturn (Maybe Exp)
-   | StmtDecvar DecVarContent
-   | StmtCall ExpCallContent
+   = StmtTryCtor StmtTry
+   | StmtCallCtor ExpCall
+   | StmtDecvarCtor DecVar
+   | StmtBreakCtor StmtBreak
+   | StmtWhileCtor StmtWhile
+   | StmtAssignCtor StmtAssign
+   | StmtReturnCtor StmtReturn
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Param
@@ -88,12 +88,12 @@ data DataMember
 data DataMembers
    = DataMembers
      {
-         dataMembersContent :: Map Token.MembrName DataMember
+         actualDataMembers :: Map Token.MembrName DataMember
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data DecMethodContent
-   = DecMethodContent
+data DecMethod
+   = DecMethod
      {
          decMethodReturnType :: Token.NominalTy,
          decMethodName       :: Token.MethdName,
@@ -105,12 +105,12 @@ data DecMethodContent
 data Methods
    = Methods
      {
-         methodsContent :: Map Token.MethdName DecMethodContent
+         actualMethods :: Map Token.MethdName DecMethod
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data DecClassContent
-   = DecClassContent
+data DecClass
+   = DecClass
      {
          decClassName :: Token.ClassName,
          decClassSupers :: [ Token.SuperName ],
@@ -119,8 +119,8 @@ data DecClassContent
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data DecFuncContent
-   = DecFuncContent
+data DecFunc
+   = DecFunc
      {
          decFuncReturnType :: Token.NominalTy,
          decFuncName       :: Token.FuncName,
@@ -129,8 +129,8 @@ data DecFuncContent
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data DecVarContent
-   = DecVarContent
+data DecVar
+   = DecVar
      {
          decVarName        :: Token.VarName,
          decVarNominalType :: Token.NominalTy,
@@ -138,16 +138,16 @@ data DecVarContent
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data ImportLocalWildcardContent
-   = ImportLocalWildcardContent
+data ImportLocalWildcard
+   = ImportLocalWildcard
      {
          importLocalWildcardPackage :: [ Token.Named ],
          importLocalWildcardLevel :: Int
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data ImportLocalNormalContent
-   = ImportLocalNormalContent
+data ImportLocalNormal
+   = ImportLocalNormal
      {
          importLocalNormalPackage :: [ Token.Named ],
          importLocalNormalLevel :: Int,
@@ -155,76 +155,113 @@ data ImportLocalNormalContent
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data ImportNonLocalWildcardContent
-   = ImportNonLocalWildcardContent
+data ImportNonLocalWildcard
+   = ImportNonLocalWildcard
      {
          importNonLocalWildcardPackage :: [ Token.Named ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data ImportNonLocalNormalContent
-   = ImportNonLocalNormalContent
+data ImportNonLocalNormal
+   = ImportNonLocalNormal
      {
          importNonLocalNormalPackage :: [ Token.Named ],
          importNonLocalNormalNames :: [[ Token.Named ]]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data ImportLocalContent
-   = ImportLocalWildcard ImportLocalWildcardContent
-   | ImportLocalNormal ImportLocalNormalContent
+data ImportLocal
+   = ImportLocalWildcardCtor ImportLocalWildcard
+   | ImportLocalNormalCtor ImportLocalNormal
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data ImportNonLocalContent
-   = ImportNonLocalWildcard ImportNonLocalWildcardContent
-   | ImportNonLocalNormal ImportNonLocalNormalContent
+data ImportNonLocal
+   = ImportNonLocalWildcardCtor ImportNonLocalWildcard
+   | ImportNonLocalNormalCtor ImportNonLocalNormal
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data DecImportContent
-   = DecImportLocal ImportLocalContent 
-   | DecImportNonLocal ImportNonLocalContent
+data DecImport
+   = DecImportLocalCtor ImportLocal 
+   | DecImportNonLocalCtor ImportNonLocal
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data ExpBinopContent
-   = ExpBinopPlus   Exp Exp
-   | ExpBinopMinus  Exp Exp
-   | ExpBinopTimes  Exp Exp
-   | ExpBinopDivide Exp Exp
+data ExpInt
+   = ExpInt
+     {
+         expIntValue :: Token.ConstInt
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ExpStr
+   = ExpStr
+     {
+         expStrValue :: Token.ConstStr
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data Operator
+   = PLUS
+   | MINUS
+   | TIMES
+   | DIVIDE
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data StmtAssignContent
-   = StmtAssignContent
+data ExpBinop
+   = ExpBinop
+     {
+         operand0 :: Exp,
+         operand1 :: Exp,
+         operator :: Operator
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ExpVar
+   = ExpVar
+     {
+         actualExpVar :: Var
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data StmtAssign
+   = StmtAssign
      {
          stmtAssignLhs :: Var,
          stmtAssignRhs :: Exp
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data StmtTryContent
-   = StmtTryContent
+data StmtTry
+   = StmtTry
      {
          stmtTryPart :: [ Stmt ],
          stmtCatchPart :: [ Stmt ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data StmtBreakContent
-   = StmtBreakContent
+data StmtBreak
+   = StmtBreak
      {
          stmtBreakLocation :: Location
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data StmtWhileContent
-   = StmtWhileContent
+data StmtWhile
+   = StmtWhile
      {
          stmtWhileCond :: Exp,
          stmtWhileBody :: [ Stmt ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data ExpCallContent
-   = ExpCallContent
+data StmtReturn
+   = StmtReturn
+     {
+         stmtReturnValue :: Maybe Exp
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data ExpCall
+   = ExpCall
      {
          callee :: Exp,
          args :: [ Exp ]
