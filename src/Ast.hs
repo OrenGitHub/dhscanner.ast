@@ -5,11 +5,13 @@
 --
 -- * /Immutable/
 --
--- * Suuports (de)serialization to(from) JSON
+-- * Supports (de)serialization to(from) JSON
 --
 -- * One AST per one source file
 --
 -- * /Every/ AST node has an associated location (not just tokens)
+--
+-- * Meant to be used with `qualified import`
 
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveAnyClass #-}
@@ -19,26 +21,19 @@ module Ast
 
 where
 
-import Location
-import qualified Token
-
 import Data.Aeson
 import GHC.Generics
 import Data.Map ( Map )
+
+-- project imports
+import Location
+import qualified Token
 
 data Root
    = Root
      {
          filename :: String,
          actualAst :: [ Dec ]
-     }
-     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
-
-data Asts
-   = Asts
-     {
-         dirname :: String,
-         astsContent :: [ Root ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
