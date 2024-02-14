@@ -54,11 +54,11 @@ data Exp
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Stmt
-   = StmtTry StmtTry
-   | StmtCall StmtCallContent
+   = StmtTry StmtTryContent
+   | StmtCall ExpCallContent
    | StmtBreak StmtBreakContent
    | StmtWhile StmtWhileContent
-   | StmtDecvar StmtDecvarContent
+   | StmtDecvar DecVarContent
    | StmtAssign StmtAssignContent
    | StmtReturn StmtReturnContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
@@ -256,8 +256,8 @@ data StmtReturnContent
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
-data StmtCallContent
-   = StmtCallContent
+data ExpCallContent
+   = ExpCallContent
      {
          callee :: Exp,
          args :: [ Exp ]
