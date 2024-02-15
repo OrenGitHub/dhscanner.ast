@@ -245,7 +245,8 @@ data StmtWhileContent
    = StmtWhileContent
      {
          stmtWhileCond :: Exp,
-         stmtWhileBody :: [ Stmt ]
+         stmtWhileBody :: [ Stmt ],
+         stmtWhileLocation :: Location
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
