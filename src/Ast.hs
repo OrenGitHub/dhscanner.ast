@@ -253,7 +253,8 @@ data StmtWhileContent
 data StmtReturnContent
    = StmtReturnContent
      {
-         stmtReturnValue :: Maybe Exp
+         stmtReturnValue :: Maybe Exp,
+         stmtReturnLocation :: Location
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
