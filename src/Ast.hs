@@ -125,6 +125,9 @@ data DecFuncContent
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
+decFuncLocation :: DecFuncContent -> Location
+decFuncLocation = Token.getFuncNameLocation . decFuncName
+
 data DecVarContent
    = DecVarContent
      {

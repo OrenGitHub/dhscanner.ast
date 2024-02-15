@@ -53,9 +53,11 @@ getNominalTyToken (NominalTy t) = t
 
 -- locations signatures
 getVarNameLocation :: VarName -> Location
+getFuncNameLocation :: FuncName -> Location
 
 -- locations signatures
 getVarNameLocation = location . getVarNameToken
+getFuncNameLocation = location . getFuncNameToken
 
 data ConstInt
    = ConstInt
