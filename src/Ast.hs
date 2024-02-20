@@ -56,11 +56,12 @@ data Exp
 data Stmt
    = StmtTry StmtTryContent
    | StmtCall ExpCallContent
+   | StmtDecvar DecVarContent
    | StmtBreak StmtBreakContent
    | StmtWhile StmtWhileContent
-   | StmtDecvar DecVarContent
    | StmtAssign StmtAssignContent
    | StmtReturn StmtReturnContent
+   | StmtContinue StmtContinueContent
    deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
 data Param
@@ -243,6 +244,14 @@ data StmtBreakContent
          stmtBreakLocation :: Location
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
+data StmtContinueContent
+   = StmtContinueContent
+     {
+         stmtContinueLocation :: Location
+     }
+     deriving ( Show, Eq, Generic, ToJSON, FromJSON )
+
 
 data StmtWhileContent
    = StmtWhileContent
