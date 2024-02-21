@@ -11,6 +11,7 @@ import Location
 
 -- general imports
 import Data.List
+import System.Exit
 import Test.QuickCheck
 
 prop_varName :: VarName -> Bool
@@ -29,4 +30,10 @@ instance Arbitrary Location
     where arbitrary = Location <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary 
 
 main :: IO ()
-main = quickCheck prop_varName
+main = do
+{
+    result <- quickCheckResult prop_varName;
+    case (isSuccess result) of
+        True -> exitSuccess
+        False -> exitFailure
+}
