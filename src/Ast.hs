@@ -300,3 +300,6 @@ data Var
 locationExpInt :: ExpIntContent -> Location
 locationExpInt = Token.constIntLocation . expIntValue
 
+locationExpStr :: ExpStrContent -> Location
+locationExpStr = Token.constStrLocation . expStrValue
+
