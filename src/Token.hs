@@ -20,6 +20,7 @@ data Named
    deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
    
 data VarName   = VarName   Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+data PkgName   = PkgName   Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
 data FuncName  = FuncName  Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
 data ParamName = ParamName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
 data FieldName = FieldName Named deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
@@ -31,6 +32,7 @@ data NominalTy = NominalTy Named deriving ( Show, Eq, Generic, ToJSON, FromJSON,
 
 -- getters signatures (to quiet ghc -Wall)
 getVarNameToken   :: VarName   -> Named
+getPkgNameToken   :: PkgName   -> Named
 getFuncNameToken  :: FuncName  -> Named
 getParamNameToken :: ParamName -> Named
 getFieldNameToken :: FieldName -> Named
@@ -42,6 +44,7 @@ getNominalTyToken :: NominalTy -> Named
 
 -- getters
 getVarNameToken   (VarName   v) = v
+getPkgNameToken   (PkgName   p) = p
 getFuncNameToken  (FuncName  f) = f
 getParamNameToken (ParamName p) = p
 getFieldNameToken (FieldName f) = f
