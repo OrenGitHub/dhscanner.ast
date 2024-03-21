@@ -68,6 +68,14 @@ getClassNameLocation = location . getClassNameToken
 getFieldNameLocation = location . getFieldNameToken
 getMethodNameLocation = location . getMethdNameToken
 
+data ConstBool
+   = ConstBool
+   {
+       constBoolValue :: Bool,
+       constBoolLocation :: Location
+   }
+   deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+
 data ConstInt
    = ConstInt
    {

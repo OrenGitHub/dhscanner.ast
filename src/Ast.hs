@@ -50,12 +50,14 @@ data Exp
    = ExpInt ExpIntContent
    | ExpStr ExpStrContent
    | ExpVar ExpVarContent
+   | ExpBool ExpBoolContent
    | ExpCall ExpCallContent
    | ExpBinop ExpBinopContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data Stmt
-   = StmtTry StmtTryContent
+   = StmtIf StmtIfContent
+   | StmtTry StmtTryContent
    | StmtCall ExpCallContent
    | StmtDecvar DecVarContent
    | StmtBreak StmtBreakContent
@@ -211,6 +213,13 @@ data ExpStrContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
+data ExpBoolContent
+   = ExpBoolContent
+     {
+         expBoolValue :: Token.ConstBool
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
 data Operator
    = PLUS
    | MINUS
@@ -265,6 +274,14 @@ data StmtContinueContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
+data StmtIfContent
+   = StmtIfContent
+     {
+         stmtIfCond :: Exp,
+         stmtIfBody :: [ Stmt ],
+         stmtIfLocation :: Location
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data StmtWhileContent
    = StmtWhileContent
