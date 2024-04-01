@@ -33,7 +33,8 @@ data Root
    = Root
      {
          filename :: String,
-         actualAst :: [ Dec ]
+         decs :: [ Dec ],
+         stmts :: [ Stmt ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -42,8 +43,6 @@ data Dec
    | DecFunc DecFuncContent
    | DecClass DecClassContent
    | DecMethod DecMethodContent
-   | DecImport DecImportContent
-   | DecPackage DecPackageContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data Exp
@@ -53,6 +52,7 @@ data Exp
    | ExpBool ExpBoolContent
    | ExpCall ExpCallContent
    | ExpBinop ExpBinopContent
+   | ExpLambda ExpLambdaContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data Stmt
@@ -70,9 +70,9 @@ data Stmt
 data Param
    = Param
      {
-         paramName        :: Token.ParamName,
+         paramName :: Token.ParamName,
          paramNominalType :: Token.NominalTy,
-         paramSerialIdx   :: Word
+         paramSerialIdx :: Word
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -96,9 +96,9 @@ data DecMethodContent
    = DecMethodContent
      {
          decMethodReturnType :: Token.NominalTy,
-         decMethodName       :: Token.MethdName,
-         decMethodParams     :: [ Param ],
-         decMethodBody       :: [ Stmt ]
+         decMethodName :: Token.MethdName,
+         decMethodParams :: [ Param ],
+         decMethodBody :: [ Stmt ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -123,9 +123,9 @@ data DecFuncContent
    = DecFuncContent
      {
          decFuncReturnType :: Token.NominalTy,
-         decFuncName       :: Token.FuncName,
-         decFuncParams     :: [ Param ],
-         decFuncBody       :: [ Stmt ]
+         decFuncName :: Token.FuncName,
+         decFuncParams :: [ Param ],
+         decFuncBody :: [ Stmt ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -136,68 +136,14 @@ data DecPackageContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
-decFuncLocation :: DecFuncContent -> Location
-decFuncLocation = Token.getFuncNameLocation . decFuncName
-
 data DecVarContent
    = DecVarContent
      {
-         decVarName        :: Token.VarName,
+         decVarName :: Token.VarName,
          decVarNominalType :: Token.NominalTy,
-         decVarInitValue   :: Maybe Exp
+         decVarInitValue :: Maybe Exp
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data ImportLocalWildcard
-   = ImportLocalWildcard
-     {
-         importLocalWildcardPackage :: [ Token.Named ],
-         importLocalWildcardLevel :: Int,
-         importLocalWildcardLocation :: Location
-     }
-     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data ImportLocalNormal
-   = ImportLocalNormal
-     {
-         importLocalNormalPackage :: [ Token.Named ],
-         importLocalNormalLevel :: Int,
-         importLocalNormalNames :: [ Token.Named ],
-         importLocalNormalLocation :: Location
-     }
-     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data ImportNonLocalWildcard
-   = ImportNonLocalWildcard
-     {
-         importNonLocalWildcardPackage :: [ Token.Named ],
-         importNonLocalWildcardLocation :: Location
-     }
-     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data ImportNonLocalNormal
-   = ImportNonLocalNormal
-     {
-         importNonLocalNormalPackage :: [ Token.Named ],
-         importNonLocalNormalNames :: [[ Token.Named ]],
-         importNonLocalNormalLocation :: Location
-     }
-     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data ImportLocal
-   = ImportLocalWildcardCtor ImportLocalWildcard
-   | ImportLocalNormalCtor ImportLocalNormal
-   deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data ImportNonLocal
-   = ImportNonLocalWildcardCtor ImportNonLocalWildcard
-   | ImportNonLocalNormalCtor ImportNonLocalNormal
-   deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data DecImportContent
-   = DecImportLocalCtor ImportLocal 
-   | DecImportNonLocalCtor ImportNonLocal
-   deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data ExpIntContent
    = ExpIntContent
@@ -226,6 +172,15 @@ data Operator
    | TIMES
    | DIVIDE
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+data ExpLambdaContent
+   = ExpLambdaContent
+     {
+         expLambdaParams :: [ Param ],
+         expLambdaBody :: [ Stmt ]
+        
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data ExpBinopContent
    = ExpBinopContent
