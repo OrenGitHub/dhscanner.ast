@@ -260,7 +260,8 @@ data ExpCallContent
    = ExpCallContent
      {
          callee :: Exp,
-         args :: [ Exp ]
+         args :: [ Exp ],
+         expCallLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
