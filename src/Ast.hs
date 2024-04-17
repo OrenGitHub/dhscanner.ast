@@ -281,9 +281,23 @@ data VarSimpleContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
+data VarSubscriptContent
+   = VarSubscriptContent
+     {
+         varSubscriptLhs :: Exp,
+         varSubscriptIdx :: Exp,
+         varSubscriptLocation :: Location
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
 data Var
    = VarSimple VarSimpleContent
    | VarField VarFieldContent
-   | VarSubscript Exp Exp
+   | VarSubscript VarSubscriptContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+locationVar :: Var -> Location
+locationVar (VarSimple    v) = Token.getVarNameLocation (varName v)
+locationVar (VarField     v) = varFieldLocation v
+locationVar (VarSubscript v) = varSubscriptLocation v
 
