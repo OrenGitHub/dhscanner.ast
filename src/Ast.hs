@@ -269,7 +269,8 @@ data VarFieldContent
    = VarFieldContent
      {
          varFieldLhs :: ExpVarContent,
-         varFieldName :: Token.FieldName
+         varFieldName :: Token.FieldName,
+         varFieldLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
