@@ -177,8 +177,8 @@ data ExpLambdaContent
    = ExpLambdaContent
      {
          expLambdaParams :: [ Param ],
-         expLambdaBody :: [ Stmt ]
-        
+         expLambdaBody :: [ Stmt ],
+         expLambdaLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
