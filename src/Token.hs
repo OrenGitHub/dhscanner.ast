@@ -58,6 +58,7 @@ getNominalTyToken (NominalTy t) = t
 getVarNameLocation :: VarName -> Location
 getFuncNameLocation :: FuncName -> Location
 getClassNameLocation :: ClassName -> Location
+getParamNameLocation :: ParamName -> Location
 getFieldNameLocation :: FieldName -> Location
 getMethodNameLocation :: MethdName -> Location
 
@@ -65,6 +66,7 @@ getMethodNameLocation :: MethdName -> Location
 getVarNameLocation = location . getVarNameToken
 getFuncNameLocation = location . getFuncNameToken
 getClassNameLocation = location . getClassNameToken
+getParamNameLocation = location . getParamNameToken
 getFieldNameLocation = location . getFieldNameToken
 getMethodNameLocation = location . getMethdNameToken
 
