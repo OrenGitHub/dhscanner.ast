@@ -62,6 +62,7 @@ data Stmt
    | StmtDecvar DecVarContent
    | StmtBreak StmtBreakContent
    | StmtWhile StmtWhileContent
+   | StmtImport StmtImportContent
    | StmtAssign StmtAssignContent
    | StmtReturn StmtReturnContent
    | StmtContinue StmtContinueContent
@@ -220,6 +221,13 @@ data StmtBreakContent
    = StmtBreakContent
      {
          stmtBreakLocation :: Location
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+data StmtImportContent
+   = StmtImportContent
+     {
+         stmtImportLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
