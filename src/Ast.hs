@@ -227,6 +227,8 @@ data StmtBreakContent
 data StmtImportContent
    = StmtImportContent
      {
+         stmtImportName :: String,
+         stmtImportAlias :: String,
          stmtImportLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
