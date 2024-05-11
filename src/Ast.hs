@@ -40,7 +40,6 @@ data Root
 
 data Dec
    = DecVar DecVarContent
-   | DecFunc DecFuncContent
    | DecClass DecClassContent
    | DecMethod DecMethodContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
@@ -59,6 +58,7 @@ data Stmt
    = StmtIf StmtIfContent
    | StmtTry StmtTryContent
    | StmtCall ExpCallContent
+   | StmtFunc StmtFuncContent
    | StmtDecvar DecVarContent
    | StmtBreak StmtBreakContent
    | StmtWhile StmtWhileContent
@@ -120,13 +120,13 @@ data DecClassContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
-data DecFuncContent
-   = DecFuncContent
+data StmtFuncContent
+   = StmtFuncContent
      {
-         decFuncReturnType :: Token.NominalTy,
-         decFuncName :: Token.FuncName,
-         decFuncParams :: [ Param ],
-         decFuncBody :: [ Stmt ]
+         stmtFuncReturnType :: Token.NominalTy,
+         stmtFuncName :: Token.FuncName,
+         stmtFuncParams :: [ Param ],
+         stmtFuncBody :: [ Stmt ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
