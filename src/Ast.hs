@@ -245,6 +245,7 @@ data StmtIfContent
      {
          stmtIfCond :: Exp,
          stmtIfBody :: [ Stmt ],
+         stmtElseBody :: [ Stmt ],
          stmtIfLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
