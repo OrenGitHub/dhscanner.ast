@@ -126,7 +126,8 @@ data StmtFuncContent
          stmtFuncReturnType :: Token.NominalTy,
          stmtFuncName :: Token.FuncName,
          stmtFuncParams :: [ Param ],
-         stmtFuncBody :: [ Stmt ]
+         stmtFuncBody :: [ Stmt ],
+         stmtFuncLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
