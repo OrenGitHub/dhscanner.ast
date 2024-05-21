@@ -100,7 +100,8 @@ data DecMethodContent
          decMethodReturnType :: Token.NominalTy,
          decMethodName :: Token.MethdName,
          decMethodParams :: [ Param ],
-         decMethodBody :: [ Stmt ]
+         decMethodBody :: [ Stmt ],
+         decMethodLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
