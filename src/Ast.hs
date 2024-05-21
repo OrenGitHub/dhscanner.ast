@@ -50,6 +50,7 @@ data Exp
    | ExpVar ExpVarContent
    | ExpBool ExpBoolContent
    | ExpCall ExpCallContent
+   | ExpField ExpFieldContent
    | ExpBinop ExpBinopContent
    | ExpLambda ExpLambdaContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
@@ -173,6 +174,7 @@ data Operator
    | MINUS
    | TIMES
    | DIVIDE
+   | PERCENT
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data ExpLambdaContent
@@ -274,6 +276,15 @@ data ExpCallContent
          callee :: Exp,
          args :: [ Exp ],
          expCallLocation :: Location
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+data ExpFieldContent
+   = ExpFieldContent
+     {
+         expFieldLhs :: Exp,
+         expFieldName :: Token.FieldName,
+         expFieldLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
