@@ -56,7 +56,8 @@ data Exp
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data Stmt
-   = StmtIf StmtIfContent
+   = StmtExp Exp
+   | StmtIf StmtIfContent
    | StmtTry StmtTryContent
    | StmtCall ExpCallContent
    | StmtFunc StmtFuncContent
