@@ -15,8 +15,7 @@ import qualified Ast
 data Asts
    = Asts
      {
-         dirname :: String,
-         astsContent :: [ Ast.Root ]
+         asts :: [ Ast.Root ]
      }
      deriving ( Show, Eq, Generic, ToJSON, FromJSON )
 
