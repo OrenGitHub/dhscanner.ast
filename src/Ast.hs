@@ -102,7 +102,8 @@ data DecMethodContent
          decMethodName :: Token.MethdName,
          decMethodParams :: [ Param ],
          decMethodBody :: [ Stmt ],
-         decMethodLocation :: Location
+         decMethodLocation :: Location,
+         hostingClassName :: Token.ClassName
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
