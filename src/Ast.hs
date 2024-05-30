@@ -53,6 +53,7 @@ data Exp
    | ExpField ExpFieldContent
    | ExpBinop ExpBinopContent
    | ExpLambda ExpLambdaContent
+   | ExpSubscript ExpSubscriptContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data Stmt
@@ -291,6 +292,16 @@ data ExpFieldContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
+data ExpSubscriptContent
+   = ExpSubscriptContent
+     {
+         expSubscriptLhs :: Exp,
+         expSubscriptIdx :: Exp,
+         expSubscriptLocation :: Location
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+
 data VarFieldContent
    = VarFieldContent
      {
@@ -310,7 +321,7 @@ data VarSimpleContent
 data VarSubscriptContent
    = VarSubscriptContent
      {
-         varSubscriptLhs :: Exp,
+         varSubscriptLhs :: ExpVarContent,
          varSubscriptIdx :: Exp,
          varSubscriptLocation :: Location
      }
