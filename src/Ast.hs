@@ -133,6 +133,7 @@ data StmtFuncContent
          stmtFuncName :: Token.FuncName,
          stmtFuncParams :: [ Param ],
          stmtFuncBody :: [ Stmt ],
+         stmtFuncAnnotations :: [ Exp ],
          stmtFuncLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
