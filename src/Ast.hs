@@ -1,17 +1,31 @@
 -- |
--- * [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
 --
--- * can represent /multiple/ programming languages
+-- * The [abstract ayntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (ast)
+--   aims to be a data structure able to represent /multiple/ abstract syntax trees from
+--   /various/ programming languages.
 --
--- * /Immutable/
+-- * Its main purpose is to serve as the first step for /static code analysis/,
+--   as part of the [dhscanner](https://github.com/OrenGitHub/dhscanner) framework
+--   for CI/CD container security checks.
 --
--- * Supports (de)serialization to(from) JSON
+-- * As part of that framework, it targets mostly languages used for /cloud native applications/:
+--   __Python__, __Ruby__, __Php__, __Javascript__, __Typescript__, __Java__ and __Golang__.
 --
--- * One AST per one source file
+-- * Typically, a file is first parsed with the corresponding native parser
+--   of the language it's written in
+--   (see [Python's native parser](https://docs.python.org/3/library/ast.html) for example).
+--   The native ast is then dumped (as JSON, or plain text)
+--   and sent to a [Happy](https://haskell-happy.readthedocs.io/en/latest/) +
+--   [Alex](https://haskell-alex.readthedocs.io/en/latest/) Haskell parser
+--   which accommodates the natively parsed content into the ast.
 --
--- * /Every/ AST node has an associated location (not just tokens)
+-- * Geared towards static code analysis, the ast design abstracts away details
+--   that are normally ignored anyway. For example, it does not distinguish between
+--   __try__ and __catch__ blocks, and models both of them as plain sequential code blocks.
 --
--- * Meant to be used with `qualified import`
+-- * Every file has exactly one ast that represents it.
+--
+-- * Non Haskell parogrammers note: The ast is /immutable/ (like everything else in Haskell ...)
 --
 
 {-# LANGUAGE DeriveGeneric #-}
