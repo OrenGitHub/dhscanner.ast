@@ -1,3 +1,21 @@
+-- |
+--
+-- * For the most part, tokens are constructed during parsing
+--
+--     * exception example: an instrumented call to __nondet__, which involves creating a 'VarName'
+--
+-- * Each token kind ( 'VarName', 'ParamName' etc. ) corresponds to its own Haskell type
+--
+--     * this means that ( for example ) 'VarName' and 'ParamName' are /not/ interchangeable
+--
+-- * Sometimes, a /unified view/ is needed for named tokens
+--
+--     * for instance, inside the symbol table
+--     * in these cases, use the included 'Named' portion of the type
+--     * getter functions below help to easily extract it
+--     * the abstract syntax tree does /not/ contain "naked" 'Named' tokens
+--
+
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -6,11 +24,21 @@ module Token
 
 where
 
+-- project imports
 import Location
 
+-- general imports
 import Data.Aeson
 import GHC.Generics
 
+-- |
+--
+-- * Raw data that is wrapped and included by the different tokens
+--
+-- * Aimed to facilitate a unified view of named tokens
+--
+-- * Is /not/ a part of the abstract syntax tree
+--
 data Named
    = Named
    {

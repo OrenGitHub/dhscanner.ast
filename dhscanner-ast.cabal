@@ -1,48 +1,55 @@
 cabal-version:      3.0
 name:               dhscanner-ast
 version:            0.1.0.0
--- synopsis:
--- description:
 license:            GPL-3.0-only
 license-file:       LICENSE
 author:             OrenGitHub
-maintainer:         tuna.is.good.for.you@gmail.com
--- copyright:
+maintainer:         Oren Ish Shalom
 build-type:         Simple
-extra-doc-files:    CHANGELOG.md
--- extra-source-files:
 
 common warnings
     ghc-options: -Wall
 
 library
-    import:           warnings
+
+    import:
+        warnings
+
     exposed-modules:
         Ast,
         Token,
         Location
 
-    -- other-modules:
-    -- other-extensions:
     build-depends:
-        base ^>=4.19.0.0,
+        base,
         containers,
         aeson
 
-    hs-source-dirs: src
+    hs-source-dirs:
+        src
 
-    default-language: Haskell2010
+    default-language:
+        Haskell2010
 
 test-suite dhscanner-ast-test
-    import:           warnings
-    default-language: Haskell2010
-    -- other-modules:
-    -- other-extensions:
-    type:             exitcode-stdio-1.0
-    hs-source-dirs:   test
-    main-is:          Main.hs
+
+    import:
+        warnings
+
+    type:
+        exitcode-stdio-1.0
+
+    hs-source-dirs:
+        test
+
+    main-is:
+        Main.hs
+
     build-depends:
-        base ^>=4.19.0.0,
+        base,
         dhscanner-ast,
         QuickCheck,
         random
+
+    default-language:
+        Haskell2010

@@ -12,6 +12,7 @@
 -- * /Every/ AST node has an associated location (not just tokens)
 --
 -- * Meant to be used with `qualified import`
+--
 
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveAnyClass #-}
@@ -339,4 +340,3 @@ locationVar :: Var -> Location
 locationVar (VarSimple    v) = Token.getVarNameLocation (varName v)
 locationVar (VarField     v) = varFieldLocation v
 locationVar (VarSubscript v) = varSubscriptLocation v
-
