@@ -65,10 +65,8 @@ data Exp
    | ExpVar ExpVarContent
    | ExpBool ExpBoolContent
    | ExpCall ExpCallContent
-   | ExpField ExpFieldContent
    | ExpBinop ExpBinopContent
    | ExpLambda ExpLambdaContent
-   | ExpSubscript ExpSubscriptContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data Stmt
@@ -300,29 +298,10 @@ data ExpCallContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
-data ExpFieldContent
-   = ExpFieldContent
-     {
-         expFieldLhs :: Exp,
-         expFieldName :: Token.FieldName,
-         expFieldLocation :: Location
-     }
-     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data ExpSubscriptContent
-   = ExpSubscriptContent
-     {
-         expSubscriptLhs :: Exp,
-         expSubscriptIdx :: Exp,
-         expSubscriptLocation :: Location
-     }
-     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-
 data VarFieldContent
    = VarFieldContent
      {
-         varFieldLhs :: ExpVarContent,
+         varFieldLhs :: Exp,
          varFieldName :: Token.FieldName,
          varFieldLocation :: Location
      }
@@ -338,7 +317,7 @@ data VarSimpleContent
 data VarSubscriptContent
    = VarSubscriptContent
      {
-         varSubscriptLhs :: ExpVarContent,
+         varSubscriptLhs :: Exp,
          varSubscriptIdx :: Exp,
          varSubscriptLocation :: Location
      }
