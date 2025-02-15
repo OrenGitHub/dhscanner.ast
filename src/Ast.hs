@@ -81,6 +81,7 @@ data Exp
    | ExpStr ExpStrContent
    | ExpVar ExpVarContent
    | ExpBool ExpBoolContent
+   | ExpNull ExpNullContent
    | ExpCall ExpCallContent
    | ExpBinop ExpBinopContent
    | ExpLambda ExpLambdaContent
@@ -90,9 +91,8 @@ data Stmt
    = StmtExp Exp
    | StmtIf StmtIfContent
    | StmtTry StmtTryContent
-   | StmtCall ExpCallContent
    | StmtFunc StmtFuncContent
-   | StmtDecvar DecVarContent
+   | StmtBlock StmtBlockContent
    | StmtBreak StmtBreakContent
    | StmtClass StmtClassContent
    | StmtWhile StmtWhileContent
@@ -100,6 +100,7 @@ data Stmt
    | StmtMethod StmtMethodContent
    | StmtAssign StmtAssignContent
    | StmtReturn StmtReturnContent
+   | StmtVardec StmtVardecContent
    | StmtContinue StmtContinueContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -170,19 +171,13 @@ data StmtFuncContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
-data DecPackageContent
-   = DecPackageContent
+data StmtVardecContent
+   = StmtVardecContent
      {
-         decPackageName :: Token.PkgName
-     }
-     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data DecVarContent
-   = DecVarContent
-     {
-         decVarName :: Token.VarName,
-         decVarNominalType :: Token.NominalTy,
-         decVarInitValue :: Maybe Exp
+         stmtVardecName :: Token.VarName,
+         stmtVardecNominalType :: Token.NominalTy,
+         stmtVardecInitValue :: Maybe Exp,
+         stmtVardecLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -204,6 +199,13 @@ data ExpBoolContent
    = ExpBoolContent
      {
          expBoolValue :: Token.ConstBool
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+data ExpNullContent
+   = ExpNullContent
+     {
+         expNullValue :: Token.ConstNull
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -265,11 +267,50 @@ data StmtBreakContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
+data StmtBlockContent
+   = StmtBlockContent
+     {
+         stmtBlockContent :: [ Stmt ],
+         stmtBlockLocation :: Location
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+-- |
+-- ==== __Examples:__
+-- 
+-- * Simple source import
+--
+-- @
+-- # stmtImportSource is "json" 
+-- # stmtImportFromSource is Nothing 
+-- # stmtImportAlias is Nothing
+-- import json
+-- @
+--
+-- * Specifying a specific name from source
+--
+-- @
+-- # stmtImportSource is "urllib.parse"
+-- # stmtImportFromSource is Just "urljoin"
+-- # stmtImportAlias is Nothing
+-- from urllib.parse import urljoin
+-- @
+--
+-- * Specifying an alias for a source import
+--
+-- @
+-- # stmtImportSource is "networkx"
+-- # stmtImportFromSource is Nothing
+-- # stmtImportAlias is Just "nx"
+-- import networkx as nx
+-- @
+--
 data StmtImportContent
    = StmtImportContent
      {
-         stmtImportName :: String,
-         stmtImportAlias :: String,
+         stmtImportSource :: String,
+         stmtImportFromSource :: Maybe String,
+         stmtImportAlias :: Maybe String,
          stmtImportLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )

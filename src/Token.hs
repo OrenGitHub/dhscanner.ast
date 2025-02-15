@@ -121,3 +121,10 @@ data ConstStr
        constStrLocation :: Location
    }
    deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+
+data ConstNull
+   = ConstNull
+   {
+       constNullLocation :: Location
+   }
+   deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
