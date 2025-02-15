@@ -1,31 +1,48 @@
 -- |
 --
--- * The [abstract ayntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (ast)
---   aims to be a data structure able to represent /multiple/ abstract syntax trees from
---   /various/ programming languages.
+-- * The [abstract ayntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) ( ast )
+--   aims to be a data structure able to:
 --
--- * Its main purpose is to serve as the first step for /static code analysis/,
---   as part of the [dhscanner](https://github.com/OrenGitHub/dhscanner) framework
---   for CI/CD container security checks.
+--     * represent /multiple/ ( native ) ast kinds
+--     * from /various/ programming languages
 --
--- * As part of that framework, it targets mostly languages used for /cloud native applications/:
---   __Python__, __Ruby__, __Php__, __Javascript__, __Typescript__, __Java__ and __Golang__.
+-- * Its main purpose is to serve as the:
 --
--- * Typically, a file is first parsed with the corresponding native parser
---   of the language it's written in
---   (see [Python's native parser](https://docs.python.org/3/library/ast.html) for example).
---   The native ast is then dumped (as JSON, or plain text)
---   and sent to a [Happy](https://haskell-happy.readthedocs.io/en/latest/) +
---   [Alex](https://haskell-alex.readthedocs.io/en/latest/) Haskell parser
---   which accommodates the natively parsed content into the ast.
+--     * first step for /static code analysis/ 
+--     * part of the [dhscanner](https://github.com/OrenGitHub/dhscanner) framework for
+--       CI\/CD container security checks 🔒 and
+--       [PII](https://en.wikipedia.org/wiki/Personal_data) leaks detection 🪪
 --
--- * Geared towards static code analysis, the ast design abstracts away details
---   that are normally ignored anyway. For example, it does not distinguish between
---   __try__ and __catch__ blocks, and models both of them as plain sequential code blocks.
+-- * As part of the [dhscanner](https://github.com/OrenGitHub/dhscanner) framework:
 --
--- * Every file has exactly one ast that represents it.
+--     * targets mostly languages used for /cloud native applications/ ☁️
+--     * Python, Ruby 💎, Php, Javascript, Typescript, Java ☕️, C# and Golang.
 --
--- * Non Haskell parogrammers note: The ast is /immutable/ (like everything else in Haskell ...)
+-- * Typical flow:
+--
+--     * a file is parsed with the corresponding native parser of the language it's written in
+--
+--         * see [Python's native parser](https://docs.python.org/3/library/ast.html), for example
+--         * native parsers hosted on independent micro services
+--
+--     * the native ast is dumped (as JSON, or plain text)
+--
+--     * dumped content is sent to a [Happy](https://haskell-happy.readthedocs.io/en/latest/) +
+--       [Alex](https://haskell-alex.readthedocs.io/en/latest/) Haskell parser
+--
+--     * the Haskell parser organizes the natively parsed content into an ast
+--
+-- * Geared towards static code analysis, the ast design abstracts away details that are normally ignored anyway
+--
+--     * for example, it does not distinguish between `try` and `catch` blocks
+--
+--     * it models both of them as plain sequential code blocks.
+--
+-- * Every file has exactly one ast ( 'Root' ) that represents it
+--
+-- * Non Haskell parogrammers note:
+--
+--     * The ast is /immutable/ ( like everything else in Haskell ... )
 --
 
 {-# LANGUAGE DeriveGeneric #-}
@@ -44,20 +61,20 @@ import Data.Map ( Map )
 import Location
 import qualified Token
 
+-- |
+-- * every file has /exactly one/ root 🌱
+--
+-- * classes, functions and methods are organized as /statements/ ( not /declarations/ )
+--
+-- * this enables a simpler view for /modules/, /namespaces/, /nested classes/ etc.
+--
 data Root
    = Root
      {
-         filename :: String,
-         decs :: [ Dec ],
+         filename :: FilePath,
          stmts :: [ Stmt ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-data Dec
-   = DecVar DecVarContent
-   | DecClass DecClassContent
-   | DecMethod DecMethodContent
-   deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data Exp
    = ExpInt ExpIntContent
@@ -77,8 +94,10 @@ data Stmt
    | StmtFunc StmtFuncContent
    | StmtDecvar DecVarContent
    | StmtBreak StmtBreakContent
+   | StmtClass StmtClassContent
    | StmtWhile StmtWhileContent
    | StmtImport StmtImportContent
+   | StmtMethod StmtMethodContent
    | StmtAssign StmtAssignContent
    | StmtReturn StmtReturnContent
    | StmtContinue StmtContinueContent
@@ -89,7 +108,7 @@ data Param
      {
          paramName :: Token.ParamName,
          paramNominalType :: Token.NominalTy,
-         paramSerialIdx :: Word
+         paramSerialIdx :: Word -- ^ ( /zero/-based )
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -109,14 +128,14 @@ data DataMembers
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
-data DecMethodContent
-   = DecMethodContent
+data StmtMethodContent
+   = StmtMethodContent
      {
-         decMethodReturnType :: Token.NominalTy,
-         decMethodName :: Token.MethdName,
-         decMethodParams :: [ Param ],
-         decMethodBody :: [ Stmt ],
-         decMethodLocation :: Location,
+         stmtMethodReturnType :: Token.NominalTy,
+         stmtMethodName :: Token.MethdName,
+         stmtMethodParams :: [ Param ],
+         stmtMethodBody :: [ Stmt ],
+         stmtMethodLocation :: Location,
          hostingClassName :: Token.ClassName,
          hostingClassSupers :: [ Token.SuperName ]
      }
@@ -125,17 +144,17 @@ data DecMethodContent
 data Methods
    = Methods
      {
-         actualMethods :: Map Token.MethdName DecMethodContent
+         actualMethods :: Map Token.MethdName StmtMethodContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
-data DecClassContent
-   = DecClassContent
+data StmtClassContent
+   = StmtClassContent
      {
-         decClassName :: Token.ClassName,
-         decClassSupers :: [ Token.SuperName ],
-         decClassDataMembers :: DataMembers,
-         decClassMethods :: Methods
+         stmtClassName :: Token.ClassName,
+         stmtClassSupers :: [ Token.SuperName ],
+         stmtClassDataMembers :: DataMembers,
+         stmtClassMethods :: Methods
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
