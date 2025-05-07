@@ -84,6 +84,7 @@ data Exp
    | ExpNull ExpNullContent
    | ExpCall ExpCallContent
    | ExpBinop ExpBinopContent
+   | ExpAssign ExpAssignContent
    | ExpLambda ExpLambdaContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -104,11 +105,15 @@ data Stmt
    | StmtContinue StmtContinueContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
+-- |
+-- @since 1.0.6
+-- 'paramNominalTypeV2' aims to replace 'paramNominalType'
 data Param
    = Param
      {
          paramName :: Token.ParamName,
-         paramNominalType :: Token.NominalTy,
+         paramNominalType :: Token.NominalTy, -- ^ ( will be deprecated soon )
+         paramNominalTypeV2 :: Maybe Var, -- ^ ( use this instead )
          paramSerialIdx :: Word -- ^ ( /zero/-based )
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
@@ -233,6 +238,18 @@ data ExpBinopContent
          expBinopRight :: Exp,
          expBinopOperator :: Operator,
          expBinopLocation :: Location
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+-- |
+-- @since 1.0.9
+-- ( added for better [php support](https://www.php.net/manual/en/language.operators.assignment.php) )
+data ExpAssignContent
+   = ExpAssignContent
+     {
+         expAssignLhs :: Var,
+         expAssignRhs :: Exp,
+         expAssignLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 

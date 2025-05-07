@@ -8,7 +8,7 @@ description:
     aims to be a data structure able to represent /multiple/ abstract syntax trees from
     /various/ programming languages. Its main purpose is to serve as the first step for /static code analysis/,
     as part of the [dhscanner](https://github.com/OrenGitHub/dhscanner) framework
-    for CI/CD container security checks. As part of that framework,
+    for CI/CD security code scans. As part of that framework,
     it targets mostly languages used for /cloud native applications/:
     __Python__, __Ruby__, __Php__, __Javascript__, __Typescript__, __Java__ and __Golang__.
     Typically, a file is first parsed with the corresponding native parser of the language it's written in
@@ -22,7 +22,7 @@ description:
     and models both of them as plain sequential code blocks. Every file has exactly one ast that represents it.
     Non Haskell parogrammers note: The ast is /immutable/ (like everything else in Haskell ...)
 
-version:            0.1.0.5
+version:            1.0.9
 license:            GPL-3.0-only
 license-file:       LICENSE
 author:             OrenGitHub
