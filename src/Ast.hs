@@ -64,14 +64,11 @@ import qualified Token
 -- |
 -- * every file has /exactly one/ root 🌱
 --
--- * classes, functions and methods are organized as /statements/ ( not /declarations/ )
---
--- * this enables a simpler view for /modules/, /namespaces/, /nested classes/ etc.
+-- * classes, functions and methods are organized as /statements/
 --
 data Root
    = Root
      {
-         filename :: FilePath,
          stmts :: [ Stmt ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
@@ -106,23 +103,46 @@ data Stmt
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 -- |
--- @since 1.0.6
--- 'paramNominalTypeV2' aims to replace 'paramNominalType'
+--
+-- * used by:
+--
+--       * 'StmtFuncContent'
+--       * 'StmtMethodContent'
+--       * 'ExpLambdaContent'
+--
+-- * note:
+--
+--       * `self` param in python methods has 'paramSerialIdx' = 0
+--       * `self` param in python methods is /ignored/ when assigning the serial index to /other/ params
+--       * see the example code below
+--
+-- ==== __Example:__
+--
+-- * params enumeration for python methods
+--
+-- @
+-- class Person:
+--     # paramSerialIdx = 1 -----------------------+
+--     # paramSerialIdx = 0 ------------+          |
+--     # paramSerialIdx = 0 ------+     |          |
+--     #                          |     |          |
+--     def some_arbitrary_method(self, name: str, age: int) -> None:
+--         pass
+-- @
 data Param
    = Param
      {
          paramName :: Token.ParamName,
-         paramNominalType :: Token.NominalTy, -- ^ ( will be deprecated soon )
-         paramNominalTypeV2 :: Maybe Var, -- ^ ( use this instead )
-         paramSerialIdx :: Word -- ^ ( /zero/-based )
+         paramNominalType :: Maybe Var,
+         paramSerialIdx :: Word -- ^ ( /zero/-based, ignores `self` in python methods when enumerating /other/ params )
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data DataMember
    = DataMember
      {
-         dataMemberName :: Token.MembrName,
-         dataMemberNominalType :: Token.NominalTy,
+         dataMemberName :: Token.MemberName,
+         dataMemberNominalType :: Maybe Var,
          dataMemberInitValue :: Maybe Exp
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
@@ -130,15 +150,15 @@ data DataMember
 data DataMembers
    = DataMembers
      {
-         actualDataMembers :: Map Token.MembrName DataMember
+         actualDataMembers :: Map Token.MemberName DataMember
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data StmtMethodContent
    = StmtMethodContent
      {
-         stmtMethodReturnType :: Token.NominalTy,
-         stmtMethodName :: Token.MethdName,
+         stmtMethodReturnType :: Maybe Var,
+         stmtMethodName :: Token.MethodName,
          stmtMethodParams :: [ Param ],
          stmtMethodBody :: [ Stmt ],
          stmtMethodLocation :: Location,
@@ -150,7 +170,7 @@ data StmtMethodContent
 data Methods
    = Methods
      {
-         actualMethods :: Map Token.MethdName StmtMethodContent
+         actualMethods :: Map Token.MethodName StmtMethodContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -167,7 +187,7 @@ data StmtClassContent
 data StmtFuncContent
    = StmtFuncContent
      {
-         stmtFuncReturnType :: Token.NominalTy,
+         stmtFuncReturnType :: Maybe Var,
          stmtFuncName :: Token.FuncName,
          stmtFuncParams :: [ Param ],
          stmtFuncBody :: [ Stmt ],
@@ -180,7 +200,7 @@ data StmtVardecContent
    = StmtVardecContent
      {
          stmtVardecName :: Token.VarName,
-         stmtVardecNominalType :: Token.NominalTy,
+         stmtVardecNominalType :: Maybe Var,
          stmtVardecInitValue :: Maybe Exp,
          stmtVardecLocation :: Location
      }
@@ -241,9 +261,6 @@ data ExpBinopContent
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
--- |
--- @since 1.0.9
--- ( added for better [php support](https://www.php.net/manual/en/language.operators.assignment.php) )
 data ExpAssignContent
    = ExpAssignContent
      {
@@ -405,8 +422,3 @@ data Var
    | VarField VarFieldContent
    | VarSubscript VarSubscriptContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
-
-locationVar :: Var -> Location
-locationVar (VarSimple    v) = Token.getVarNameLocation (varName v)
-locationVar (VarField     v) = varFieldLocation v
-locationVar (VarSubscript v) = varSubscriptLocation v

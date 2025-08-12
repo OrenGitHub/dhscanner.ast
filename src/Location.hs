@@ -33,7 +33,11 @@ where
 import Data.Aeson
 import GHC.Generics
 
--- | Lines and columns are 1-based, like in most IDEs.
+-- |
+-- Lines and columns are 1-based, for compatability with
+-- [Sarif](https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790937).
+--
+-- > The line number of the first line in a text artifact SHALL be 1.
 data Location =
      Location
      {
@@ -43,4 +47,4 @@ data Location =
          colStart  :: Word,
          colEnd    :: Word
      }
-     deriving ( Show, Eq, Generic, ToJSON, FromJSON, Ord )
+     deriving ( Show, Read, Eq, Generic, ToJSON, FromJSON, Ord )
