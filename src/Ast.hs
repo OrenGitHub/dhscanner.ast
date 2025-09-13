@@ -81,6 +81,7 @@ data Exp
    | ExpNull ExpNullContent
    | ExpCall ExpCallContent
    | ExpBinop ExpBinopContent
+   | ExpKwArg ExpKwArgContent
    | ExpAssign ExpAssignContent
    | ExpLambda ExpLambdaContent
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
@@ -248,6 +249,15 @@ data ExpLambdaContent
          expLambdaParams :: [ Param ],
          expLambdaBody :: [ Stmt ],
          expLambdaLocation :: Location
+     }
+     deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+data ExpKwArgContent
+   = ExpKwArgContent
+     {
+         expKwArgName :: String,
+         expKwArgValue :: Exp,
+         expKwArgLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
