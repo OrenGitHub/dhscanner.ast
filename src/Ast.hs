@@ -69,6 +69,7 @@ import qualified Token
 data Root
    = Root
      {
+         filename :: FilePath,
          stmts :: [ Stmt ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
@@ -325,8 +326,8 @@ data StmtBlockContent
 -- * Simple source import
 --
 -- @
--- # stmtImportSource is "json" 
--- # stmtImportFromSource is Nothing 
+-- # stmtImportSource is (ImportSource (ImportThirdPartyContent "json")) <--- because json is /not/ an existing dir in the repo
+-- # stmtImportSpecific is Nothing 
 -- # stmtImportAlias is Nothing
 -- import json
 -- @
@@ -334,8 +335,8 @@ data StmtBlockContent
 -- * Specifying a specific name from source
 --
 -- @
--- # stmtImportSource is "urllib.parse"
--- # stmtImportFromSource is Just "urljoin"
+-- # stmtImportSource is (ImportSource (ImportThirdPartyContent "urllib.parse")) <--- because urllib/parse is /not/ an existing dir in the repo
+-- # stmtImportSpecific is Just (ImportSpecific "urljoin")
 -- # stmtImportAlias is Nothing
 -- from urllib.parse import urljoin
 -- @
@@ -343,21 +344,40 @@ data StmtBlockContent
 -- * Specifying an alias for a source import
 --
 -- @
--- # stmtImportSource is "networkx"
+-- # stmtImportSource is (ImportSource (ImportThirdPartyContent "networkx")) <--- because networkx is /not/ an existing dir in the repo
 -- # stmtImportFromSource is Nothing
--- # stmtImportAlias is Just "nx"
+-- # stmtImportAlias is Just (ImportAlias "nx")
 -- import networkx as nx
 -- @
 --
 data StmtImportContent
    = StmtImportContent
      {
-         stmtImportSource :: String,
-         stmtImportFromSource :: Maybe String,
-         stmtImportAlias :: Maybe String,
+         stmtImportSource :: ImportSource,
+         stmtImportSpecific :: Maybe ImportSpecific,
+         stmtImportAlias :: Maybe ImportAlias,
          stmtImportLocation :: Location
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+data ImportSource
+   = ImportLocal ImportLocalContent
+   | ImportThirdParty ImportThirdPartyContent
+   deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+-- | Filename or directory
+newtype ImportLocalContent = ImportLocalContent FilePath deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+-- |
+-- Names that do not exist as directories in the repo
+-- are classified by default as being "third party"
+newtype ImportThirdPartyContent = ImportThirdPartyContent String deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+-- | See `StmtImportContent`
+newtype ImportSpecific = ImportSpecific String deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+
+-- | See `StmtImportContent`
+newtype ImportAlias = ImportAlias String deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data StmtContinueContent
    = StmtContinueContent
