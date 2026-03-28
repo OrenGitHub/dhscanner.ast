@@ -10,8 +10,7 @@
 --
 --     * first step for /static code analysis/ 
 --     * part of the [dhscanner](https://github.com/OrenGitHub/dhscanner) framework for
---       CI\/CD container security checks 🔒 and
---       [PII](https://en.wikipedia.org/wiki/Personal_data) leaks detection 🪪
+--       CI\/CD SAST security checks 🔒
 --
 -- * As part of the [dhscanner](https://github.com/OrenGitHub/dhscanner) framework:
 --
@@ -366,7 +365,10 @@ data ImportSource
    deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 -- | Filename or directory
-newtype ImportLocalContent = ImportLocalContent FilePath deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+data ImportLocalContent
+   = ImportLocalFile FilePath
+   | ImportLocalDir FilePath
+   deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 -- |
 -- Names that do not exist as directories in the repo
