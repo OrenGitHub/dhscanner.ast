@@ -236,7 +236,9 @@ data ExpNullContent
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
 data Operator
-   = PLUS
+   = EQ
+   | NEQ
+   | PLUS
    | MINUS
    | TIMES
    | DIVIDE
