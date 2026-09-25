@@ -375,13 +375,19 @@ data ImportLocalContent
 -- |
 -- Names that do not exist as directories in the repo
 -- are classified by default as being "third party"
-newtype ImportThirdPartyContent = ImportThirdPartyContent String deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+newtype ImportThirdPartyContent = ImportThirdPartyContent String
+    deriving stock ( Show, Eq, Ord, Generic )
+    deriving anyclass ( ToJSON, FromJSON )
 
 -- | See `StmtImportContent`
-newtype ImportSpecific = ImportSpecific String deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+newtype ImportSpecific = ImportSpecific String
+    deriving stock ( Show, Eq, Ord, Generic )
+    deriving anyclass ( ToJSON, FromJSON )
 
 -- | See `StmtImportContent`
-newtype ImportAlias = ImportAlias String deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
+newtype ImportAlias = ImportAlias String
+    deriving stock ( Show, Eq, Ord, Generic )
+    deriving anyclass ( ToJSON, FromJSON )
 
 data StmtContinueContent
    = StmtContinueContent
