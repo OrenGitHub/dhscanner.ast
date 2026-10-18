@@ -144,7 +144,8 @@ data DataMember
      {
          dataMemberName :: Token.MemberName,
          dataMemberNominalType :: Maybe Var,
-         dataMemberInitValue :: Maybe Exp
+         dataMemberInitValue :: Maybe Exp,
+         dataMemberAnnotations :: [ Exp ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
@@ -162,6 +163,7 @@ data StmtMethodContent
          stmtMethodName :: Token.MethodName,
          stmtMethodParams :: [ Param ],
          stmtMethodBody :: [ Stmt ],
+         stmtMethodAnnotations :: [ Exp ],
          stmtMethodLocation :: Location,
          hostingClassName :: Token.ClassName,
          hostingClassSupers :: [ Token.SuperName ]
