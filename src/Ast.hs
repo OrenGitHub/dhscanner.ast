@@ -166,7 +166,8 @@ data StmtMethodContent
          stmtMethodAnnotations :: [ Exp ],
          stmtMethodLocation :: Location,
          hostingClassName :: Token.ClassName,
-         hostingClassSupers :: [ Token.SuperName ]
+         hostingClassSupers :: [ Token.SuperName ],
+         hostingClassAnnotations :: [ Exp ]
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
