@@ -135,7 +135,8 @@ data Param
      {
          paramName :: Token.ParamName,
          paramNominalType :: Maybe Var,
-         paramSerialIdx :: Word -- ^ ( /zero/-based, ignores `self` in python methods when enumerating /other/ params )
+         paramSerialIdx :: Word, -- ^ ( /zero/-based, ignores `self` in python methods when enumerating /other/ params )
+         paramAnnotations :: [ Exp ] -- ^ ( for example, Java Spring: `@RequestParam` )
      }
      deriving ( Show, Eq, Ord, Generic, ToJSON, FromJSON )
 
